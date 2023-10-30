@@ -20,16 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  // `sequelize.define` also returns the model
-  //   console.log(User === sequelize.models.User); // true
-
   User.associate = (models) => {
     User.hasMany(models.Product, {
       onDelete: "cascade",
     });
-  };
 
-  User.associate = (models) => {
     User.hasOne(models.Profile, {
       onDelete: "cascade",
     });

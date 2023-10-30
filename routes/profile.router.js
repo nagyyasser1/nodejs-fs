@@ -3,8 +3,8 @@ const db = require("../models");
 
 router.post("/", (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    db.User.create({ username, email, password })
+    const { firstname, lastname, country, UserId } = req.body;
+    db.Profile.create({ firstname, lastname, country, UserId })
       .then((result) => {
         res.status(200).send(result);
       })
@@ -18,7 +18,7 @@ router.post("/", (req, res, next) => {
 
 router.get("/", (req, res, next) => {
   try {
-    db.User.findAll()
+    db.Profile.findAll({ include: [db.User] })
       .then((result) => {
         res.status(200).send(result);
       })
@@ -32,15 +32,11 @@ router.get("/", (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
   try {
-    db.User.findOne({
-      where: { id: req.params.id },
-      include: [db.Profile, db.Product],
-    })
+    db.Profile.findOne({ where: { id: req.params.id }, include: [db.User] })
       .then((result) => {
         res.status(200).send(result);
       })
       .catch((err) => {
-        console.log(err);
         res.status(400).send(err);
       });
   } catch (error) {
@@ -50,11 +46,12 @@ router.get("/:id", (req, res, next) => {
 
 router.put("/:id", (req, res, next) => {
   try {
-    db.User.update(
+    db.Profile.update(
       {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        country: req.body.country,
+        UserId: req.body.UserId,
       },
       { where: { id: req.params.id } }
     )
@@ -71,7 +68,7 @@ router.put("/:id", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
   try {
-    db.User.destroy({ where: { id: req.params.id } })
+    db.Profile.destroy({ where: { id: req.params.id } })
       .then((result) => {
         res.status(200).send(result);
       })

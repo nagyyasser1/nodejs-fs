@@ -3,8 +3,8 @@ const db = require("../models");
 
 router.post("/", (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    db.User.create({ username, email, password })
+    const { name, price, UserId } = req.body;
+    db.Product.create({ name, price, UserId })
       .then((result) => {
         res.status(200).send(result);
       })
@@ -18,7 +18,7 @@ router.post("/", (req, res, next) => {
 
 router.get("/", (req, res, next) => {
   try {
-    db.User.findAll()
+    db.Product.findAll()
       .then((result) => {
         res.status(200).send(result);
       })
@@ -32,15 +32,11 @@ router.get("/", (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
   try {
-    db.User.findOne({
-      where: { id: req.params.id },
-      include: [db.Profile, db.Product],
-    })
+    db.Product.findOne({ where: { id: req.params.id }, include: [db.User] })
       .then((result) => {
         res.status(200).send(result);
       })
       .catch((err) => {
-        console.log(err);
         res.status(400).send(err);
       });
   } catch (error) {
@@ -50,11 +46,11 @@ router.get("/:id", (req, res, next) => {
 
 router.put("/:id", (req, res, next) => {
   try {
-    db.User.update(
+    db.Product.update(
       {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
+        name: req.body.name,
+        price: req.body.price,
+        UserId: req.body.UserId,
       },
       { where: { id: req.params.id } }
     )
@@ -71,7 +67,7 @@ router.put("/:id", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
   try {
-    db.User.destroy({ where: { id: req.params.id } })
+    db.Product.destroy({ where: { id: req.params.id } })
       .then((result) => {
         res.status(200).send(result);
       })
