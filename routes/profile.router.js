@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const db = require("../models");
+const db = require("../config/connectDB");
 
 router.post("/", (req, res, next) => {
   try {

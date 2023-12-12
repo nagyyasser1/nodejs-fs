@@ -1,34 +1,23 @@
-module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define(
-    "User",
-    {
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        // allowNull defaults to true
-      },
-      password: {
-        type: DataTypes.STRING,
-        // allowNull defaults to true
-      },
+const { DataTypes } = require("sequelize");
+const { db } = require("../config/connectDB");
+
+const User = db.define(
+  "User",
+  {
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    {
-      // Other model options go here
-    }
-  );
+    lastName: {
+      type: DataTypes.STRING,
+    },
+  },
+  {}
+);
 
-  User.associate = (models) => {
-    User.hasMany(models.Product, {
-      onDelete: "cascade",
-    });
+(async () => {
+  await db.sync({ alter: true });
+  // Code here
+})();
 
-    User.hasOne(models.Profile, {
-      onDelete: "cascade",
-    });
-  };
-
-  return User;
-};
+module.exports = User;
